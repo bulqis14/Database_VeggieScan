@@ -9,22 +9,8 @@ import * as firebase from 'firebase';
 @Injectable()
 export class FirebaseServiceProvider {
 
-  constructor(public afd: AngularFireDatabase, private alertCtrl: AlertController) {
-}
-    getProduct() {
-      return this.afd.list('/Productlist/');
-    }
-
-    getProductId(id){
-      console.log(id)
-      return this.afd.list('/Productlist', {
-        query: {
-          orderByChild: "text",
-          equalTo: id
-        }
-      })
-
-    }
+  constructor(public afd: AngularFireDatabase,
+    private alertCtrl: AlertController) {}
 
     addProduct(name){
       let product = firebase.database()
@@ -33,7 +19,6 @@ export class FirebaseServiceProvider {
                     .equalTo(name.text);
       product.once('value', (data)=>{
         if(!data.val()){
-          // console.log('tidak ada product')
             let alert = this.alertCtrl.create({
                 title: 'New Product',
                 subTitle: 'successfully added!',
@@ -43,24 +28,5 @@ export class FirebaseServiceProvider {
           this.afd.list('/Productlist/').push(name);
         }
       })
-      //this.afd.list('/Productlist/').push(name);
     }
-
-    removeProduct(id){
-      this.afd.list('/Productlist/').remove(id);
-    }
-
-    addHistory(data){
-      this.afd.list('/history').push(data);
-    }
-
-    getHistory(){
-      return this.afd.list('/history', {
-        query: {
-          limitToLast: 5
-        }
-      })
-    }
-
-
 }
